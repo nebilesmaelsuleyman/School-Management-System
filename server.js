@@ -4,19 +4,10 @@ const dotenv=require('dotenv');
 dotenv.config({path:'./config.env'});
 const app=require('./app');
 
-const connectDB= async ()=>{
-    try{
-        const connection =await mongoose.connect(process.env.url,{useNewUrlParser:true, useUnifiedTopology:true,})
+
+        mongoose.connect(process.env.url);
         mongoose.connection.on('connected',()=>{
-            console.log('mongoose is connected succesfully !')
-        })
-
-    }catch(error){
-        console.error(`Error: ${error.message}`)
-
-    }
-
-}
+        console.log('mongoose is connected succesfully !')})
 
 const port=process.env.port|| 4000
 app.listen(port,()=>{
