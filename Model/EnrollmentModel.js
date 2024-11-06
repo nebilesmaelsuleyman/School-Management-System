@@ -4,20 +4,22 @@ const EnrollmentSchema=new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user' 
     },
-    class: {
+    course: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class'
+        ref: 'Course',
+        required: true,
     },
     enrollmentDate: {
         type: Date,
         default: Date.now
     },
-    // Additional fields:
-    // - Enrollment status (e.g., 'active', 'inactive', 'dropped')
-    // - Fee details
-    // - Academic year
-});
+    academicYear: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'AcademicYear' 
+    },
 
-const Enrollment = mongoose.model('Enrollment', enrollmentSchema);
+
+})
+const Enrollment = mongoose.model('Enrollment',EnrollmentSchema);
 
 module.exports = Enrollment;

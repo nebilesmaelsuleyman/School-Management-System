@@ -33,7 +33,7 @@ const userSchema= new mongoose.Schema(
             require:true,
             minlength:8
         },
-        passwrodconfirmation:{
+        passwordconfirmation:{
             type:String,
             require:[true, 'please confirm your password'],
             validate:{
@@ -41,6 +41,7 @@ const userSchema= new mongoose.Schema(
                     return el === this.password;
                 }, message:'password are not the same'
             },
+
             passwordChangedAt:{
                 type:Date
             },
@@ -52,25 +53,32 @@ const userSchema= new mongoose.Schema(
     }
 )
 
-userSchema.pre('save', async function(next){
-    this.password =await bcrypt.hash(this.password,12)
-    this.passwrodconfirmation= undefined;
-    next()
-    
-})
+
+userSchema.pre('save', async function(next) {
+    // Only run this function if password was actually modified
+    if (!this.isModified('password')) return next();
+
+    // Hash the password with cost of 12
+    this.password = await bcrypt.hash(this.password, 12);
+
+    // Delete passwordConfirm field
+    this.passwordConfirm = undefined;
+    next();
+});
+
 userSchema.pre('save',function(next){
     this.passwordChangedAt=Date.now()
- next()
+next()
 })
 userSchema.methods.comparePassword= async function(candidatePassword){
     console.log(candidatePassword)
 
     return  await bcrypt.compare(candidatePassword,this.password)
 }
-userSchema.methods.ResetToken =async function(){
+userSchema.methods.getResetToken = function(){
     const resetToken =crypto.randomBytes(32).toString('hex');
     this.passwordResetToken=crypto.createHash('sha256').update(resetToken).digest('hex');
-    this.passwordResetExpires =Date.now()+10*60*1000;
+    this.passwordResetExpires =Date.now()+60*60*1000;
     return resetToken
 }
 

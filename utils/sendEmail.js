@@ -1,4 +1,5 @@
 const nodemailer=require('nodemailer')
+
 const sendEmail =async options =>{
 const transporter= nodemailer.createTransport({
     host:process.env.email_host,
@@ -15,6 +16,7 @@ const mailoptions ={
     subject:options.subject,
     text:options.message
 }
- 
+
 await transporter.sendMail(mailoptions)
 }
+module.exports=sendEmail
