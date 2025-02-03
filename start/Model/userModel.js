@@ -2,6 +2,7 @@ const mongoose= require('mongoose');
 const validator= require('validator');
 const bcrypt=require('bcryptjs');
 const crypto=require('crypto');
+const { required } = require('joi');
 
 const userSchema= new mongoose.Schema(
     {
@@ -18,9 +19,22 @@ const userSchema= new mongoose.Schema(
             lowerCase:true,
             validation:[validator.isEmail,'please probide a valid email']
         },
-        class:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:'Class'
+        section:{
+            type: Number,
+            require:true
+            
+        },
+        teacherInfo:{
+            teacherId:String,
+            subjectTaught:[String],
+            qualifications:[String],
+            yearsofExperience:Number
+        },
+        adminInfo:{
+            position:String,
+            adminId:String
+
+
         },
         photo:String,
         role:{
@@ -32,6 +46,9 @@ const userSchema= new mongoose.Schema(
             type:String,
             require:true,
             minlength:8
+        },
+        program:{
+            type:string
         },
         passwordconfirmation:{
             type:String,
@@ -48,10 +65,16 @@ const userSchema= new mongoose.Schema(
             passwordResetToken: String,
             passwordResetExpires:Date,
 
+        },
+        active:{
+            type:Boolean,
+            default:true,
+            select:false     
         }
 
-    }
+    }, {timestamps:true}
 )
+
 
 
 userSchema.pre('save', async function(next) {

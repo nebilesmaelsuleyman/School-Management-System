@@ -9,17 +9,29 @@ const EnrollmentSchema=new mongoose.Schema({
         ref: 'Course',
         required: true,
     },
+    classLevel:{
+        type:Number
+    },
     enrollmentDate: {
         type: Date,
-        default: Date.now
     },
     academicYear: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'AcademicYear' 
+        type:Number
     },
 
 
 })
+EnrollmentSchema.pre("save", async function(next){
+    const now = Date.now()
+    const day=String(now.getDate().padStart(2,'0'))
+    const month=String(now.getMonth()+1).padStart(2,"0")
+    const year=string(now.getFullYear());
+    this.academicYear=`${year}`;
+    this.enrollmentDate=`${day}/${month}`
+    next();
+
+})
+
 const Enrollment = mongoose.model('Enrollment',EnrollmentSchema);
 
 module.exports = Enrollment;

@@ -32,17 +32,6 @@ exports.getEnrollmentById = async (req, res) => {
     }
 };
 
-exports.updateEnrollment = async (req, res) => {
-    try {
-        const enrollment = await Enrollment.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!enrollment) {
-            return res.status(404).json({ success: false, error: 'Enrollment not found' });
-        }
-        res.status(200).json({ success: true, data: enrollment });
-    } catch (error) {
-        res.status(400).json({ success: false, error: error.message });
-    }
-};
 
 exports.deleteEnrollment = async (req, res) => {
     try {

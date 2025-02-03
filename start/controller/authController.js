@@ -11,7 +11,8 @@ const signToken= id =>{
 }
 
 const CreateSendToken=(user, statusCode ,res)=>{
-    const Token =signToken(user._id);
+    // const Token =signToken(user._id);
+    const Token ="secrete cookies"
     const cookieOptions ={
         expires:new Date(Date.now()+ process.env.jwt_cookie_expiration*1),
         httponly:true,
