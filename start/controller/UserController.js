@@ -9,11 +9,22 @@ const Schema=joi.object({
     photo: joi.string().uri(),
     role: joi.string().valid('admin', 'Teacher', 'student', 'parent').default('student'),
     password:joi.string().min(8),
-    passwordConfirmation:joi.string().valid(joi.ref('password'))
+    passwordConfirmation:joi.string().valid(joi.ref('password')),
 
-
+    teacherInfo: joi.object({
+        teacherId: joi.string(),
+        subjectTaught: joi.array().items(joi.string()),
+        qualifications: joi.array().items(joi.string()),
+        yearsofExperience: joi.number().integer().min(0), 
+    }).allow(null), 
+    
+    adminInfo: joi.object({
+        position: joi.string(),
+        adminId: joi.string(),
+    }).allow(null),
 
 })
+
 
 exports.createUser=async (req,res)=>{
     try{

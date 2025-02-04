@@ -48,7 +48,7 @@ const userSchema= new mongoose.Schema(
             minlength:8
         },
         program:{
-            type:string
+            type:String
         },
         passwordconfirmation:{
             type:String,
