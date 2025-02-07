@@ -1,5 +1,5 @@
 const winston=require('winston')
-const config=require('./confing')
+const config=require('./config')
 const {format, createLogger,transports}=winston;
 const {combine, timestamp,printf,colorize,uncolorize}=format;
 const winstonForm= printf(({level,message,timestamp,stack})=>{
@@ -7,7 +7,7 @@ const winstonForm= printf(({level,message,timestamp,stack})=>{
 })
 
 const logger =createLogger({
-    level:info,
+    level:'info',
     format:combine(timestamp(),winstonForm,config.env ==='development'?colorize() :uncolorize()),
     transports:[new transports.Console()]
 });

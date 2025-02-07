@@ -3,9 +3,10 @@ const mongoose =require('mongoose');
 const dotenv=require('dotenv');
 dotenv.config({path:'./config.env'});
 const app=require('./app');
+const config =require('./config/config')
 
 
-        mongoose.connect(process.env.url);
+        mongoose.connect(config.url);
         mongoose.connection.on('connected',()=>{
         console.log('mongoose is connected succesfully !')})
 
