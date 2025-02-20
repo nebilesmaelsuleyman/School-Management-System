@@ -66,5 +66,5 @@ AssesmentSchema.pre('save',async function(next){
     next();
 })
 
-const Assesment=mongoose.Model('Assesment',AssesmentSchema)
+const Assesment=mongoose.model('Assesments',AssesmentSchema)
 module.exports=Assesment;

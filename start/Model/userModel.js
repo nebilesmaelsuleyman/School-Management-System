@@ -76,35 +76,33 @@ const userSchema= new mongoose.Schema(
 )
 
 
+userSchema.pre('save',async function(next){
 
-userSchema.pre('save', async function(next) {
-    // Only run this function if password was actually modified
-    if (!this.isModified('password')) return next();
+    if(!this.isModified('password')){
+        return next();
+    }
+    try{
+        this.password= await bcrypt.hash(this.password,12);
+        next()
+    }catch(err){
+        return next(err)
 
-    // Hash the password with cost of 12
-    this.password = await bcrypt.hash(this.password, 12);
-
-    // Delete passwordConfirm field
-    this.passwordConfirm = undefined;
-    next();
-});
-
-userSchema.pre('save',function(next){
-    this.passwordChangedAt=Date.now()
-next()
+    }
 })
-userSchema.methods.comparePassword= async function(candidatePassword){
-    console.log(candidatePassword)
 
-    return  await bcrypt.compare(candidatePassword,this.password)
-}
-userSchema.methods.getResetToken = function(){
-    const resetToken =crypto.randomBytes(32).toString('hex');
-    this.passwordResetToken=crypto.createHash('sha256').update(resetToken).digest('hex');
-    this.passwordResetExpires =Date.now()+60*60*1000;
-    return resetToken
-}
 
+userSchema.methods.comparePassword = async function(candidatePassword){
+    try{
+        const isMatch = await bcrypt.compare(candidatePassword,this.password)
+        return isMatch
+
+    }catch(err){
+        console.log('error while comparing password')
+        throw err;
+
+    }
+
+}
 
 var User= mongoose.model('user',userSchema)
 module.exports=User;

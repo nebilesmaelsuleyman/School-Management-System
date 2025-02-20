@@ -8,5 +8,6 @@ if(error)logger.error(error)
 module.exports={
     url:envars.URL,
     port:envars.PORT,
-    jwt_cookie_expiration:envars.jwt_cookie_expiration
+    jwt_cookie_expiration:envars.jwt_cookie_expiration,
+    env: envars.NODE_ENV
 }
